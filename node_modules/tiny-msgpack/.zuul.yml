@@ -1,0 +1,8 @@
+ui: mocha-bdd
+browsers:
+  - name: chrome
+    version: [38, latest]
+  - name: firefox
+    version: [19, latest]
+  - name: opera
+    version: [25, latest]
