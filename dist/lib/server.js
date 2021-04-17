@@ -491,7 +491,8 @@ var Server = /*#__PURE__*/function (_EventEmitter) {
       var ns = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "/";
       socket.on("message", /*#__PURE__*/function () {
         var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(data) {
-          var msg_options, decodedData, response;
+          var msg_options, decodedData, responses, _iterator3, _step3, message, _response, response;
+
           return _regenerator["default"].wrap(function _callee$(_context) {
             while (1) {
               switch (_context.prev = _context.next) {
@@ -526,28 +527,107 @@ var Server = /*#__PURE__*/function (_EventEmitter) {
                   })), msg_options));
 
                 case 10:
-                  _context.next = 12;
-                  return _this5._runMethod(decodedData, socket._id, ns);
+                  if (!Array.isArray(decodedData)) {
+                    _context.next = 38;
+                    break;
+                  }
 
-                case 12:
-                  response = _context.sent;
+                  if (decodedData.length) {
+                    _context.next = 13;
+                    break;
+                  }
 
-                  if (response) {
-                    _context.next = 15;
+                  return _context.abrupt("return", socket.send(utils.typedArrayToBuffer(_tinyMsgpack["default"].encode({
+                    // jsonrpc: "2.0",
+                    error: utils.createError(-32600, "Invalid array"),
+                    id: null
+                  })), msg_options));
+
+                case 13:
+                  responses = [];
+                  _iterator3 = _createForOfIteratorHelper(decodedData);
+                  _context.prev = 15;
+
+                  _iterator3.s();
+
+                case 17:
+                  if ((_step3 = _iterator3.n()).done) {
+                    _context.next = 27;
+                    break;
+                  }
+
+                  message = _step3.value;
+                  _context.next = 21;
+                  return _this5._runMethod(message, socket._id, ns);
+
+                case 21:
+                  _response = _context.sent;
+
+                  if (_response) {
+                    _context.next = 24;
+                    break;
+                  }
+
+                  return _context.abrupt("continue", 25);
+
+                case 24:
+                  responses.push(_response);
+
+                case 25:
+                  _context.next = 17;
+                  break;
+
+                case 27:
+                  _context.next = 32;
+                  break;
+
+                case 29:
+                  _context.prev = 29;
+                  _context.t1 = _context["catch"](15);
+
+                  _iterator3.e(_context.t1);
+
+                case 32:
+                  _context.prev = 32;
+
+                  _iterator3.f();
+
+                  return _context.finish(32);
+
+                case 35:
+                  if (responses.length) {
+                    _context.next = 37;
                     break;
                   }
 
                   return _context.abrupt("return");
 
-                case 15:
+                case 37:
+                  return _context.abrupt("return", socket.send(utils.typedArrayToBuffer(_tinyMsgpack["default"].encode(responses)), msg_options));
+
+                case 38:
+                  _context.next = 40;
+                  return _this5._runMethod(decodedData, socket._id, ns);
+
+                case 40:
+                  response = _context.sent;
+
+                  if (response) {
+                    _context.next = 43;
+                    break;
+                  }
+
+                  return _context.abrupt("return");
+
+                case 43:
                   return _context.abrupt("return", socket.send(utils.typedArrayToBuffer(_tinyMsgpack["default"].encode(response)), msg_options));
 
-                case 16:
+                case 44:
                 case "end":
                   return _context.stop();
               }
             }
-          }, _callee, null, [[3, 7]]);
+          }, _callee, null, [[3, 7], [15, 29, 32, 35]]);
         }));
 
         return function (_x) {
@@ -571,15 +651,15 @@ var Server = /*#__PURE__*/function (_EventEmitter) {
         var ns,
             results,
             event_names,
-            _iterator3,
-            _step3,
+            _iterator4,
+            _step4,
             name,
             index,
             namespace,
             socket_index,
             _results,
-            _iterator4,
-            _step4,
+            _iterator5,
+            _step5,
             _name,
             _index,
             response,
@@ -647,18 +727,18 @@ var Server = /*#__PURE__*/function (_EventEmitter) {
               case 10:
                 results = {};
                 event_names = Object.keys(this.namespaces[ns].events);
-                _iterator3 = _createForOfIteratorHelper(message.params);
+                _iterator4 = _createForOfIteratorHelper(message.params);
                 _context2.prev = 13;
 
-                _iterator3.s();
+                _iterator4.s();
 
               case 15:
-                if ((_step3 = _iterator3.n()).done) {
+                if ((_step4 = _iterator4.n()).done) {
                   _context2.next = 32;
                   break;
                 }
 
-                name = _step3.value;
+                name = _step4.value;
                 index = event_names.indexOf(name);
                 namespace = this.namespaces[ns];
 
@@ -709,12 +789,12 @@ var Server = /*#__PURE__*/function (_EventEmitter) {
                 _context2.prev = 34;
                 _context2.t0 = _context2["catch"](13);
 
-                _iterator3.e(_context2.t0);
+                _iterator4.e(_context2.t0);
 
               case 37:
                 _context2.prev = 37;
 
-                _iterator3.f();
+                _iterator4.f();
 
                 return _context2.finish(37);
 
@@ -744,18 +824,18 @@ var Server = /*#__PURE__*/function (_EventEmitter) {
 
               case 46:
                 _results = {};
-                _iterator4 = _createForOfIteratorHelper(message.params);
+                _iterator5 = _createForOfIteratorHelper(message.params);
                 _context2.prev = 48;
 
-                _iterator4.s();
+                _iterator5.s();
 
               case 50:
-                if ((_step4 = _iterator4.n()).done) {
+                if ((_step5 = _iterator5.n()).done) {
                   _context2.next = 63;
                   break;
                 }
 
-                _name = _step4.value;
+                _name = _step5.value;
 
                 if (this.namespaces[ns].events[_name]) {
                   _context2.next = 55;
@@ -793,12 +873,12 @@ var Server = /*#__PURE__*/function (_EventEmitter) {
                 _context2.prev = 65;
                 _context2.t1 = _context2["catch"](48);
 
-                _iterator4.e(_context2.t1);
+                _iterator5.e(_context2.t1);
 
               case 68:
                 _context2.prev = 68;
 
-                _iterator4.f();
+                _iterator5.f();
 
                 return _context2.finish(68);
 

@@ -350,34 +350,24 @@ export default class Server extends EventEmitter {
                     id: null
                 })), msg_options);
             }
-            // if (Array.isArray(decodedData))
-            // {
-            //     if (!decodedData.length)
-            //         return socket.send(utils.typedArrayToBuffer(msgpack.encode({
-            //             // jsonrpc: "2.0",
-            //             error: utils.createError(-32600, "Invalid array"),
-            //             id: null
-            //         })), msg_options)
-            //
-            //     const responses = []
-            //
-            //     for (const message of decodedData)
-            //     {
-            //         const response = await this._runMethod(message, socket._id, ns)
-            //
-            //         if (!response)
-            //             continue
-            //
-            //         responses.push(response)
-            //     }
-            //
-            //     if (!responses.length)
-            //         return
-            //
-            //     return socket.send(utils.typedArrayToBuffer(
-            //   msgpack.encode(responses)), msg_options
-            // )
-            // }
+            if (Array.isArray(decodedData)) {
+                if (!decodedData.length)
+                    return socket.send(utils.typedArrayToBuffer(msgpack.encode({
+                        // jsonrpc: "2.0",
+                        error: utils.createError(-32600, "Invalid array"),
+                        id: null
+                    })), msg_options);
+                const responses = [];
+                for (const message of decodedData) {
+                    const response = await this._runMethod(message, socket._id, ns);
+                    if (!response)
+                        continue;
+                    responses.push(response);
+                }
+                if (!responses.length)
+                    return;
+                return socket.send(utils.typedArrayToBuffer(msgpack.encode(responses)), msg_options);
+            }
             const response = await this._runMethod(decodedData, socket._id, ns);
             if (!response)
                 return;

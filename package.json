@@ -17,11 +17,9 @@
   "dependencies": {
     "@babel/runtime": "^7.11.2",
     "assert-args": "^1.2.1",
-    "bufferutil": "^4.0.1",
     "circular-json": "^0.5.9",
     "eventemitter3": "^4.0.7",
     "tiny-msgpack": "^1.0.2",
-    "utf-8-validate": "^5.0.2",
     "uuid": "^8.3.0",
     "ws": "^7.3.1"
   },
