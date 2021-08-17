@@ -22,7 +22,8 @@
 </div>
 
 ## About
-This is a fork of [rpc-websocket](https://github.com/elpheria/rpc-websockets)
+
+This is a fork of [rpc-websockets](https://github.com/elpheria/rpc-websockets)
 The **msgpack-rpc-websockets** library enables developers to easily implement their business logic that includes messaging between users, machines or any devices. It provides a possibility to send and receive JSON data through the WebSocket communication protocol in order to support two-way notification push, running RPC methods and firing any types of event signalling. Only clients can call RPC methods and not vice versa at the moment. Both frontend (HTML/JS-based) and backend (Node.js-based) development environments are supported.
 
 **msgpack-rpc-websockets** is built on Node.js and supports both LTS and Current versions.
@@ -32,77 +33,83 @@ Use the free OSS edition in order to implement and manage your own WebSocket ser
 ## Quick start
 
 Install our OSS library in your project:
+
 ```
 npm install msgpack-rpc-websockets
 ```
 
 Write your source code using `msgpack-rpc-websockets`:
+
 ```js
-var WebSocket = require('msgpack-rpc-websockets').Client
-var WebSocketServer = require('msgpack-rpc-websockets').Server
+var WebSocket = require("msgpack-rpc-websockets").Client;
+var WebSocketServer = require("msgpack-rpc-websockets").Server;
 
 // instantiate Server and start listening for requests
 var server = new WebSocketServer({
   port: 8080,
-  host: 'localhost'
-})
+  host: "localhost",
+});
 
 // register an RPC method
-server.register('sum', function(params) {
-  return params[0] + params[1]
-})
+server.register("sum", function (params) {
+  return params[0] + params[1];
+});
 
 // ...and maybe a protected one also
-server.register('account', function() {
-  return ['confi1', 'confi2']
-}).protected()
+server
+  .register("account", function () {
+    return ["confi1", "confi2"];
+  })
+  .protected();
 
 // create an event
-server.event('feedUpdated')
+server.event("feedUpdated");
 
 // get events
-console.log(server.eventList())
+console.log(server.eventList());
 
 // emit an event to subscribers
-server.emit('feedUpdated')
+server.emit("feedUpdated");
 
 // close the server
-server.close()
+server.close();
 
 // instantiate Client and connect to an RPC server
-var ws = new WebSocket('ws://localhost:8080')
+var ws = new WebSocket("ws://localhost:8080");
 
-ws.on('open', function() {
+ws.on("open", function () {
   // call an RPC method with parameters
-  ws.call('sum', [5, 3]).then(function(result) {
-    require('assert').equal(result, 8)
-  })
+  ws.call("sum", [5, 3]).then(function (result) {
+    require("assert").equal(result, 8);
+  });
 
   // send a notification to an RPC server
-  ws.notify('openedNewsModule')
+  ws.notify("openedNewsModule");
 
   // subscribe to receive an event
-  ws.subscribe('feedUpdated')
+  ws.subscribe("feedUpdated");
 
-  ws.on('feedUpdated', function() {
-    updateLogic()
-  })
+  ws.on("feedUpdated", function () {
+    updateLogic();
+  });
 
   // unsubscribe from an event
-  ws.unsubscribe('feedUpdated')
+  ws.unsubscribe("feedUpdated");
 
   // login your client to be able to use protected methods
-  ws.login({'username': 'confi1', 'password':'foobar'}).then(function() {
-    ws.call('account').then(function(result) {
-      require('assert').equal(result, ['confi1', 'confi2'])
+  ws.login({ username: "confi1", password: "foobar" })
+    .then(function () {
+      ws.call("account").then(function (result) {
+        require("assert").equal(result, ["confi1", "confi2"]);
+      });
     })
-  }).catch(function(error) {
-    console.log('auth failed')
-  })
+    .catch(function (error) {
+      console.log("auth failed");
+    });
 
   // close a websocket connection
-  ws.close()
-})
+  ws.close();
+});
 ```
 
 ## Documentation
