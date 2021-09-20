@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/zo-el/msgpack-rpc-websockets">
-    <img src="https://raw.githubusercontent.com/zo-el/msgpack-rpc-websockets/develop/assets/logo.png">
+    <img src="https://raw.githubusercontent.com/zo-el/msgpack-rpc-websockets/master/assets/logo.png">
   </a>
   <br>
   <p>
